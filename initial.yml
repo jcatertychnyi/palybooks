@@ -1,0 +1,103 @@
+##################################################
+# Ansible initialisation script
+##################################################
+---
+- hosts: all
+  collections:
+    - community.mysql
+    - community.general
+  become: true
+  vars_files:
+    - vars/default.yml
+
+# Check server status - must be answer
+  tasks:
+    - action: ping
+
+    - name: Install Prerequisites
+      apt: 
+        name= aptitude
+        update_cache=yes
+        state=latest 
+        force_apt_get=yes
+
+    - name: Install start packages
+      apt: 
+        name={{ item }} 
+        update_cache=yes 
+        state=latest
+      loop: 
+        - python3-pymysql
+        - mc
+        - snapd
+        - net-tools
+        - make
+        - git
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-properties-common
+        - python3-pip
+        - virtualenv
+        - python3-setuptools
+ 
+
+# Nginx Configuration
+    - name: Install Nginx
+      when: "'web' in group_names"
+      apt: 
+        name=nginx 
+        update_cache=yes 
+        state=latest
+
+# MySQL Configuration
+    - name: Install MySQL
+      when: "'mysql' in group_names"
+      apt: 
+        name=nginx 
+        update_cache=yes 
+        state=latest
+
+    - name: Create database
+      when: "'mysql' in group_names"
+      community.mysql.mysql_db:
+        name:
+          - {{ db_base }}
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create user with password  
+      when: "'mysql' in group_names"
+      community.mysql.mysql_user: 
+        name: "{{ db_user }}"
+        password: "{{ db_password }}"
+        priv: "{{ db_base }}.*:ALL"
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+
+#Docker install block
+    - name: Add Docker GPG apt Key
+      when: "'docker' in group_names"
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      when: "'docker' in group_names"
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      when: "'docker' in group_names"
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      when: "'docker' in group_names"
+      pip:
+        name: docker
+
