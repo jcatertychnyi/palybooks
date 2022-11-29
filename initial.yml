@@ -109,7 +109,7 @@
         name: docker
 
     - name: Install Docker compose module
-      when: "'docker' in group_names"
+      when: "'mysql' in group_names"
       pip:
         name: docker-compose    
 
