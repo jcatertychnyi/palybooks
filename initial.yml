@@ -5,6 +5,7 @@
 - hosts: all
   collections:
     - community.mysql
+    - community.docker
     - community.general
   become: true
   vars_files:
@@ -13,13 +14,6 @@
 # Check server status - must be answer
   tasks:
     - action: ping
-
-    - name: Install Prerequisites
-      apt: 
-        name= aptitude
-        update_cache=yes
-        state=latest 
-        force_apt_get=yes
 
     - name: Install start packages
       apt: 
@@ -62,7 +56,7 @@
       when: "'mysql' in group_names"
       community.mysql.mysql_db:
         name:
-          - {{ db_base }}
+          - "{{ db_base }}"
         state: present
         login_unix_socket: /var/run/mysqld/mysqld.sock
 
@@ -93,6 +87,13 @@
       when: "'docker' in group_names"
       apt:
         name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Update apt and install docker-ce
+      when: "'docker' in group_names"
+      apt:
+        name: docker-compose-plugin
         state: latest
         update_cache: true
 

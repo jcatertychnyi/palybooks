@@ -1,1 +1,1 @@
-ansible-playbook  initial.yml --syntax-check
+ansible-playbook  initial.yml -i inventory 
