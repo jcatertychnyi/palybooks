@@ -44,32 +44,6 @@
         update_cache=yes 
         state=latest
 
-# MySQL Configuration
-    - name: Install MySQL
-      when: "'mysql' in group_names"
-      apt: 
-        name=nginx 
-        update_cache=yes 
-        state=latest
-
-    - name: Create database
-      when: "'mysql' in group_names"
-      community.mysql.mysql_db:
-        name:
-          - "{{ db_base }}"
-        state: present
-        login_unix_socket: /var/run/mysqld/mysqld.sock
-
-    - name: Create user with password  
-      when: "'mysql' in group_names"
-      community.mysql.mysql_user: 
-        name: "{{ db_user }}"
-        password: "{{ db_password }}"
-        priv: "{{ db_base }}.*:ALL"
-        state: present
-        login_unix_socket: /var/run/mysqld/mysqld.sock
-
-
 #Docker install block
     - name: Add Docker GPG apt Key
       when: "'docker' in group_names"
@@ -102,3 +76,52 @@
       pip:
         name: docker
 
+#MySQL block
+    - name: Add Docker GPG apt Key
+      when: "'mysql' in group_names"
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      when: "'mysql' in group_names"
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      when: "'mysql' in group_names"
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Update apt and install docker-ce
+      when: "'mysql' in group_names"
+      apt:
+        name: docker-compose-plugin
+        state: latest
+        update_cache: true
+
+    - name: Install Docker Module for Python
+      when: "'mysql' in group_names"
+      pip:
+        name: docker
+
+    - name: Install Docker compose module
+      when: "'docker' in group_names"
+      pip:
+        name: docker-compose    
+
+    - name: copy docker-compose
+      when: "'mysql' in group_names"
+      copy:
+        src: ./files/docker-compose.yml
+        dest: $HOME/docker-compose.yml
+
+    - name: run docker-compose
+      when: "'mysql' in group_names"
+      docker_compose:
+        project_src: $HOME
+        build: yes
+      register: output
