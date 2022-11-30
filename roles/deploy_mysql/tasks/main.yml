@@ -1,0 +1,14 @@
+---
+# tasks file for deploy_mysql
+- name: copy docker-compose
+  when: "'mysql' in group_names"
+  ansible.builtin.copy:
+    src: docker-compose.yml
+    dest: $HOME/docker-compose.yml
+
+- name: run docker-compose
+  when: "'mysql' in group_names"
+  community.docker.docker_compose:
+    project_src: $HOME
+    build: yes
+  register: output
