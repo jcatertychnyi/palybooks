@@ -1,12 +1,9 @@
 Quick Steps:
+1. Configure Inventory
+2. Set tags
+3. Run script
 
-shell
-nano vars/default.yml
-```
-```
-
-Run the Playbook
-
-```command
-ansible-playbook -l [target] -i [inventory file] -u [remote user] playbook.yml
-```
+Tags list:
+web - wes server
+docker  - install dicker engine
+mysql - install mysql with dcoker-compose

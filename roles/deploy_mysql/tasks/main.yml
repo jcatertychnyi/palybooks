@@ -1,14 +1,22 @@
 ---
 # tasks file for deploy_mysql
+- name: Creates directory
+  file:
+    path: /var/docker/services/mysql8
+    state: directory
+
 - name: copy docker-compose
-  when: "'mysql' in group_names"
   ansible.builtin.copy:
     src: docker-compose.yml
-    dest: $HOME/docker-compose.yml
+    dest: /var/docker/services/mysql8/docker-compose.yml
+
+- name: copy env-file
+  ansible.builtin.copy:
+    src: m8.env
+    dest: /var/docker/services/mysql8/m8.env
 
 - name: run docker-compose
-  when: "'mysql' in group_names"
   community.docker.docker_compose:
-    project_src: $HOME
+    project_src: /var/docker/services/mysql8
     build: yes
   register: output

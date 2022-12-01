@@ -1,2 +1,0 @@
-[web]
-test_serv1 ansible_host=16.171.34.167 ansible_user=ubuntu

@@ -2,10 +2,7 @@
 # tasks file for initial_soft
 - name: Install start packages
   ansible.builtin.apt:
-    name: "{{ item }}"
-    update_cache: yes 
-    state: latest
-  loop: 
+    name: 
     - python3-pymysql
     - mc
     - snapd
@@ -18,5 +15,8 @@
     - software-properties-common
     - python3-pip
     - virtualenv
-    - python3-setuptools
+    - python3-setuptools  
+    update_cache: yes 
+    state: latest
+      
     

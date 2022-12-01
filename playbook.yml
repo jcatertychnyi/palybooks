@@ -9,45 +9,19 @@
     - community.docker
     - community.general
   become: true
-  vars_files:
-    - inventory/group_vars/all/default.yml
   roles:
-    - initial_soft 
-    
-# Docker install block
-- hosts: docker
-  collections:
-    - community.mysql
-    - community.docker
-    - community.general
-  become: true
-  vars_files:
-    - inventory/group_vars/all/default.yml
-  roles:
-    - install_docker
+    - role: initial_soft 
 
-# MySQL block
-- hosts: mysql
-  collections:
-    - community.mysql
-    - community.docker
-    - community.general
-  become: true
-  vars_files:
-    - inventory/group_vars/all/default.yml
-  roles:
-    - install_docker
-    - deploy_mysql
-  
-# Web server blocks
-- hosts: web
-  collections:
-    - community.mysql
-    - community.docker
-    - community.general
-  become: true
+    - role: install_docker  
+      tags: docker
+
+    - role: deploy_mysql
+      tags: mysql
+
+
   tasks:
   - name: Install Nginx
+    tags: web
     ansible.builtin.apt:
       name: nginx
       update_cache: yes

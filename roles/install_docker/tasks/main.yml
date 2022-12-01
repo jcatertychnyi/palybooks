@@ -10,22 +10,17 @@
     repo: deb https://download.docker.com/linux/ubuntu focal stable
     state: present
 
-- name: Update apt and install docker-ce
+- name: Install docker
   ansible.builtin.apt:
-    name: docker-ce
+    name: 
+      - docker-ce
+      - docker-compose-plugin
     state: latest
     update_cache: true
 
-- name: Update apt and install docker-ce
-  ansible.builtin.apt:
-    name: docker-compose-plugin
-    state: latest
-    update_cache: true
-
-- name: Install Docker Module for Python
+- name: Install Docker Modules for Python
   ansible.builtin.pip:
-    name: docker
+    name:
+      - docker
+      - docker-compose
 
-- name: Install Docker compose module
-  ansible.builtin.pip:
-    name: docker-compose    
