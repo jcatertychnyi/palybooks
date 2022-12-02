@@ -11,6 +11,7 @@
   become: true
   roles:
     - role: initial_soft 
+      tags: always
 
     - role: install_docker  
       tags: docker
@@ -18,12 +19,5 @@
     - role: deploy_mysql
       tags: mysql
 
-
-  tasks:
-  - name: Install Nginx
-    tags: web
-    ansible.builtin.apt:
-      name: nginx
-      update_cache: yes
-      state: latest
-
+    - role: install_nginx
+      tags: web
