@@ -1,0 +1,4 @@
+---
+# vars file for deploy_mysql
+MYSQL_PATH: /var/docker/services/mysql8
+PASS_VAR: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters,digits') }}"

@@ -1,0 +1,22 @@
+---
+# tasks file for initial_soft
+- name: main | Install start packages
+  ansible.builtin.apt:
+    name: 
+    - python3-pymysql
+    - mc
+    - snapd
+    - net-tools
+    - make
+    - git
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+    - python3-pip
+    - virtualenv
+    - python3-setuptools  
+    update_cache: yes 
+    state: latest
+      
+    

@@ -1,0 +1,26 @@
+---
+# tasks file for install_docker
+- name: main | Add Docker GPG apt Key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: main | Add Docker Repository
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+- name: main | Install docker
+  ansible.builtin.apt:
+    name: 
+      - docker-ce
+      - docker-compose-plugin
+    state: latest
+    update_cache: true
+
+- name: main | Install Docker Modules for Python
+  ansible.builtin.pip:
+    name:
+      - docker
+      - docker-compose
+

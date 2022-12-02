@@ -1,0 +1,7 @@
+  - name: main | Install Nginx
+    tags: web
+    ansible.builtin.apt:
+      name: nginx
+      update_cache: yes
+      state: latest
+

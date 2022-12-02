@@ -1,0 +1,23 @@
+---
+##################################################
+# Server initialisation script
+##################################################
+- name: Server initialization
+  hosts: all
+  collections:
+    - community.mysql
+    - community.docker
+    - community.general
+  become: true
+  roles:
+    - role: initial_soft 
+      tags: always
+
+    - role: install_docker  
+      tags: docker
+
+    - role: deploy_mysql
+      tags: mysql
+
+    - role: install_nginx
+      tags: web
