@@ -1,4 +1,4 @@
-  - name: Install Nginx
+  - name: main | Install Nginx
     tags: web
     ansible.builtin.apt:
       name: nginx

@@ -1,6 +1,6 @@
 ---
 # tasks file for initial_soft
-- name: Install start packages
+- name: main | Install start packages
   ansible.builtin.apt:
     name: 
     - python3-pymysql

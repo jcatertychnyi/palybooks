@@ -1,22 +1,24 @@
 ---
 # tasks file for deploy_mysql
-- name: Creates directory
+- name: main | Creates directory
   file:
-    path: /var/docker/services/mysql8
+    path: "{{ MYSQL_PATH }}"
     state: directory
 
-- name: copy docker-compose
+- name: main | Copy docker-compose
   ansible.builtin.copy:
     src: docker-compose.yml
-    dest: /var/docker/services/mysql8/docker-compose.yml
+    dest: "{{ MYSQL_PATH }}/docker-compose.yml"
 
-- name: copy env-file
-  ansible.builtin.copy:
-    src: m8.env
-    dest: /var/docker/services/mysql8/m8.env
+- name: main | Copy env-file as template
+  ansible.builtin.template:
+    src: m8.j2
+    dest: "{{ MYSQL_PATH }}/m8.env"
 
-- name: run docker-compose
+
+
+- name: main | Run docker-compose
   community.docker.docker_compose:
-    project_src: /var/docker/services/mysql8
+    project_src: "{{ MYSQL_PATH }}"
     build: yes
   register: output
